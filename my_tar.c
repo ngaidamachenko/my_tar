@@ -1,4 +1,4 @@
-#include "my_tar.h"
+#include "my_tar.h"  
 
 // Write error messages using write to stderr
 void write_error(const char *msg) {
@@ -42,7 +42,7 @@ void my_memset(void *ptr, int value, size_t num) {
     unsigned char *p = ptr;
     for (size_t i = 0; i < num; i++) {
         p[i] = (unsigned char)value;
-    }
+    } 
 }
 
 // Custom function to convert integer to octal string
@@ -62,11 +62,11 @@ int my_strtol_octal(const char *str) {
     }
     return result;
 }
-
+ 
 // Create tar header for a file
 int create_tar_header(const char *file_name, tar_header *header) {
     struct stat st;
-    if (lstat(file_name, &st) < 0) {
+    if (lstat(file_name, &st) < 0) { 
         write_error("my_tar: Cannot stat file\n");
         return -1;
     }
@@ -84,7 +84,7 @@ int create_tar_header(const char *file_name, tar_header *header) {
     // Compute checksum
     unsigned int checksum = 0;
     unsigned char *bytes = (unsigned char *)header;
-    for (int i = 0; i < sizeof(tar_header); i++) {
+    for (size_t i = 0; i < sizeof(tar_header); i++) {
         checksum += bytes[i];
     }
     my_itoa_octal(checksum, header->checksum, 6);
@@ -106,7 +106,7 @@ int write_file_to_archive(int archive_fd, const char *file_name) {
         if (write(archive_fd, buffer, bytes_read) != bytes_read) {
             write_error("my_tar: Error writing file to archive\n");
             close(file_fd);
-            return -1;
+            return -1; 
         }
     }
 
@@ -136,12 +136,12 @@ int list_archive_contents(int archive_fd) {
         // Skip file contents
         lseek(archive_fd, (file_size + BLOCK_SIZE - 1) / BLOCK_SIZE * BLOCK_SIZE, SEEK_CUR);
     }
-
+ 
     return 0;
 }
 
 // Extract files from archive
-int extract_archive(int archive_fd) {
+int extract_archive(int archive_fd) { 
     tar_header header;
     while (read(archive_fd, &header, sizeof(tar_header)) > 0) {
         if (header.name[0] == '\0') {

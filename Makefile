@@ -1,9 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-TARGET = my_tar
 SRCS = my_tar.c
-
-all: $(TARGET)
+TARGET = my_tar
 
 $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
@@ -12,6 +10,8 @@ clean:
 	rm -f $(TARGET)
 
 fclean: clean
-	rm -f *.o
+	rm -f $(EXEC)
 
 re: fclean all
+
+.PHONY: all clean fclean re

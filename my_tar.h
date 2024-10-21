@@ -1,6 +1,8 @@
 #ifndef MY_TAR_H
 #define MY_TAR_H
 
+#define _POSIX_C_SOURCE 200809L
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -13,6 +15,8 @@
 #include <utime.h>
 #include <string.h>
 #include <time.h>
+
+#define BLOCK_SIZE 512 
 
 // Complex and strict tar header that is close the original
 typedef struct {
@@ -38,15 +42,16 @@ typedef struct {
 void write_error(const char *msg);
 int my_strlen(const char *str);
 void my_memset(void *ptr, int value, size_t num);
-void my_itoa_octal(int value, char *str, size_t size);
+void my_itoa_octal(int num, char *str, int size);
+int my_strtol_octal(const char *str);
 int my_strcmp(const char *str1, const char *str2);
 void create_archive(const char *archive_name, int argc, char *argv[]);
 void append_to_archive(const char *archive_name, int argc, char *argv[]);
-void list_archive_contents(const char *archive_name);
-void extract_archive(int archive_fd);
-int my_strtol_octal(const char *str, int size);
+int list_archive_contents(int archive_fd);
 void add_file_to_archive(int archive_fd, const char *file_name);
 int file_exists(const char *path);
 void extract_file(int archive_fd, const tar_header *header);
+int extract_archive(int archive_fd);
+int create_tar_header(const char *file_name, tar_header *header); 
 
 #endif // MY_TAR_H
